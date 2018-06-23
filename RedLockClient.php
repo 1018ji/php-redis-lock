@@ -10,7 +10,7 @@ class RedLockClient extends RedLockMutex
     protected function add($client, $key, $value, $expire)
     {
         try {
-            return $client->set($key, $value, "EX", $expire, "NX");
+            return $client->set($key, $value, ['nx', 'ex' => $expire]);
         } catch (PredisException $exception) {
             $message = sprintf(
                 "Failed to acquire lock for key '%s' at %s",
@@ -24,7 +24,7 @@ class RedLockClient extends RedLockMutex
     protected function evalScript($client, $script, $numkeys, array $arguments)
     {
         try {
-            return $client->eval(...array_merge([$script, $numkeys], $arguments));
+            return $client->eval($script, $arguments, $numkeys);
         } catch (PredisException $exception) {
             $message = sprintf(
                 "Failed to release lock at %s",

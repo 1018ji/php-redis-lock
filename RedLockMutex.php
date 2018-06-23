@@ -11,7 +11,6 @@ abstract class RedLockMutex extends SpinlockMutex
         parent::__construct($name, $timeout);
 
         $this->redisAPIs = $redisAPIs;
-        $this->logger    = new NullLogger();
     }
 
     protected function acquire($key, $expire)

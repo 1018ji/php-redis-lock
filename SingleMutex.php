@@ -8,7 +8,7 @@ abstract class SingleMutex extends SpinlockMutex
     // redis 实例
     private $redisAPI;
 
-    public function __construct(array $redisAPI, $name, $timeout = 3)
+    public function __construct($redisAPI, $name, $timeout = 3)
     {
         parent::__construct($name, $timeout);
 
@@ -26,7 +26,7 @@ abstract class SingleMutex extends SpinlockMutex
 
         $exception = null;
         try {
-            $acquired = $this->add($redisAPI, $key, $this->token, $expire) ? true : false;
+            $acquired = $this->add($this->redisAPI, $key, $this->token, $expire) ? true : false;
         } catch (LockAcquireException $exception) {
             $acquired = false;
         }
@@ -55,7 +55,7 @@ abstract class SingleMutex extends SpinlockMutex
         ';
 
         // 如果删除锁失败，直接异常
-        return $this->evalScript($redis, $script, 1, [$key, $this->token]);
+        return $this->evalScript($this->redisAPI, $script, 1, [$key, $this->token]);
     }
 
     abstract protected function add($redisAPI, $key, $value, $expire);

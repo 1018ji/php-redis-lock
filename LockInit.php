@@ -1,25 +1,9 @@
 <?php
-function autoLoad($class) {
-    $basePath = __DIR__ . DIRECTORY_SEPARATOR;
-    $fileName = $class . '.php';
 
-    $path = $basePath . $fileName;
-    if (file_exists($path)) {
-        require($path);
-        return;
+$classMap = require __DIR__ . DIRECTORY_SEPARATOR . 'autoload_classmap.php';
+
+spl_autoload_register(function($class) use ($classMap) {
+    if (isset($classMap[$class]) && file_exists($path = $classMap[$class])) {
+        require_once($path);
     }
-
-    $path = $basePath . 'exception' . DIRECTORY_SEPARATOR . $fileName;
-    if (file_exists($path)) {
-        require($path);
-        return;
-    }
-
-    $path = $basePath . 'util' . DIRECTORY_SEPARATOR . $fileName;
-    if (file_exists($path)) {
-        require($path);
-        return;
-    }
-}
-
-spl_autoload_register('autoLoad');
+});

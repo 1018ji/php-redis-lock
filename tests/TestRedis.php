@@ -1,6 +1,6 @@
 <?php
 
-require_once('../LockInit.php');
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR .'LockInit.php');
 
 $redis = new Redis();
 $redis->connect('127.0.0.1', 6379);

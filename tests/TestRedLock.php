@@ -1,16 +1,13 @@
 <?php
 
-require_once('../LockInit.php');
-
-$redisOne = new Redis();
-$redisOne->connect('127.0.0.1', 6379);
-
-$redisTwo = new Redis();
-$redisTwo->connect('10.188.40.15', 6379);
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR .'LockInit.php');
 
 $redisAPIs = [
-    $redisOne,
-    $redisTwo,
+    (new Redis)->connect('127.0.0.1', 6379),
+    (new Redis)->connect('127.0.0.1', 6380),
+    (new Redis)->connect('127.0.0.1', 6381),
+    (new Redis)->connect('127.0.0.1', 6382),
+    (new Redis)->connect('127.0.0.1', 6383),
 ];
 
 $instance = new RedLockClient($redisAPIs, 'redlock_client');
